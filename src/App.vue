@@ -1,28 +1,88 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+	<div class = "app">
+		<div v-for="pot in pots_selected"
+		v-bind:key="pot.x"
+		:style="{position: 'absolute', top:pot.y, left:pot.x}" 
+		class="card">
+			<Card v-bind:active="pot.full" />
+		</div>
+	</div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+import Card from './components/Card.vue';
+import pots from './scripts/matrix.json'
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+	data() {
+		return {
+			pots: pots,
+			//pots_active: null,
+			pots_init: null,
+			pots_selected: []
+		}
+	},
+	components: {
+		'Card': Card
+	},
+	created: function() {
+
+		var i = 0
+		while ( i < this.select_pots.length ) {
+			var sel = this.select_pots[i]
+			if( i == this.select_active) {
+				this.pots[sel].full = true
+			}
+			this.pots_selected.push(this.pots[sel])
+			i++
+		}
+		
+	},/*
+	methods: {
+		logdata: function () {
+			console.log(this.pots)
+		},
+
+	},*/
+/*	mounted: {
+		logdata()
+	},*/
+	computed: {
+		select_pots: function () {
+			var amount = 11,
+			lower_bound = 0,
+			upper_bound = 21,
+			pots_selected = []
+
+			while (pots_selected.length < amount) {
+				var rn = 
+					Math.floor(Math.random()*(upper_bound - lower_bound) + lower_bound);
+					if (pots_selected.indexOf(rn) == -1) { 
+						pots_selected.push(rn);
+					}
+			}
+			return pots_selected;
+		},
+		select_active: function () {
+			var size = 11;
+			var active = Math.floor(Math.random()*size);
+			return active;
+		}
+	}
 }
+
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+.app {
+	width: 1200px;
+	height: 864px;
+	background-image: url("./assets/bg.png");
+	position: relative;
+	margin: 0 auto;
+},
+.card {
+		position: absolute;
+	}
 </style>
