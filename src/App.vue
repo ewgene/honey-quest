@@ -18,9 +18,8 @@ export default {
 	data() {
 		return {
 			pots: pots,
-			//pots_active: null,
-			pots_init: null,
-			pots_selected: []
+			pots_selected: [],
+			isLogged: false
 		}
 	},
 	components: {
@@ -79,10 +78,14 @@ export default {
 	width: 1200px;
 	height: 864px;
 	background-image: url("./assets/bg.png");
+	background-size: contain;
+	background-repeat: no-repeat;
 	position: relative;
-	margin: 0 auto;
+	transform-origin: 0 0;
+	transform: scale(0.73);
+	overflow: hidden;
 },
 .card {
-		position: absolute;
+	position: absolute;
 	}
 </style>

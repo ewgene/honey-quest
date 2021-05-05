@@ -1,19 +1,23 @@
 <template>
-	<vue-flip active-click="" width="51px" height="64px">
-		<template v-slot:front>
-		</template>
-		<template v-slot:back v-if="active==true">
-			<span class="pot full"></span>
-		</template>
-		<template v-slot:back v-else>
-			<span class="pot empty"></span>
-		</template>
-	</vue-flip>
+	<div class="flipSound" @click="play()">
+		<vue-flip active-click="" width="51px" height="64px">
+			<template v-slot:front>
+			</template>
+			<template v-slot:back v-if="active==true">
+				<span class="pot full"></span>
+			</template>
+			<template v-slot:back v-else>
+				<span class="pot empty"></span>
+			</template>
+		</vue-flip>
+	</div>
 </template>
 
 <script>
 
 import VueFlip from 'vue-flip';
+//import sound from "@/sound/flip.mp3";
+import flipSound from '../assets/flip.wav';
 
 export default {
 	
@@ -21,7 +25,22 @@ export default {
 	components: {
 		'vue-flip': VueFlip
 	},
-	props: ["active"]
+	props: ["active"],
+	data: function() {
+		return {
+			flipSound: flipSound
+		}
+	},
+  methods: {
+		play() {
+			var audio = new Audio(flipSound);
+			audio.play();
+		}
+  },
+	/*created: {
+		play
+	}*/
+
 }
 </script>
 
