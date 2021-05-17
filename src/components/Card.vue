@@ -16,7 +16,6 @@
 <script>
 
 import VueFlip from 'vue-flip';
-//import sound from "@/sound/flip.mp3";
 import flipSound from '../assets/flip.wav';
 
 export default {

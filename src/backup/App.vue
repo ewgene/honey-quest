@@ -1,25 +1,36 @@
 <template>
 <div class="app">
-	<transition name="slide-fade">
-		<div id="game" v-if="isLogged">
 
-			<div v-for="pot in pots_selected"
-			v-bind:key="pot.x"
-			:style="{position: 'absolute', top:pot.y, left:pot.x}" 
-			class="card">
-				<Card v-bind:active="pot.full" />
-			</div>
+	<div id="game">
 
+		<div v-for="pot in pots_selected"
+		v-bind:key="pot.x"
+		:style="{position: 'absolute', top:pot.y, left:pot.x}" 
+		class="card">
+			<Card v-bind:active="pot.full" />
 		</div>
-	</transition>
-	<div id="Admin" :style="{position: 'absolute', left:adminPos+'px'}">
-		<Login v-on:logged="loginCheck" />
+
 	</div>
+
+	<div id="Admin">
+		<p class="comm">РАЗВИВАЮЩИЕ ИГРЫ «БЭРСФОРД»</p>
+		<img class="logo" src='./assets/logo-sm.svg'>
+		<p class="head">THE BEARSFORD GAMES</p>
+		<br />
+		<input class="input-style" 
+			placeholder="name" 
+			type="text">
+		<input class="input-style"
+			placeholder="password"
+			type="password">
+		<div class="radius-button" @click="screen">Sign In</div>
+	</div>
+	
 </div>
 </template>
 
 <script>
-import Login from './components/Login.vue';
+
 import Card from './components/Card.vue';
 import pots from './scripts/matrix.json'
 
@@ -32,13 +43,12 @@ export default {
 			fullScreen: false,
 			adminPos: null,
 			adminWidth: null,
-//			scrHeight: screen.height,
-//			winHeight: window.innerHeight
+			scrHeight: screen.height,
+			winHeight: window.innerHeight
 		}
 	},
 	components: {
-		'Card': Card,
-		'Login': Login
+		'Card': Card
 	},
 	created: function() {
 
@@ -81,17 +91,9 @@ export default {
 				self.fullScreen = true;
 			}
 		},
-		loginCheck(value) {
-			this.isLogged = value;
-		}
 	},
 	mounted: function () {
-		this.adminPos = 
-			document.querySelector(".app").getBoundingClientRect().width/2 
-			- document.querySelector("#Admin").getBoundingClientRect().width/2
-
-		document.querySelector("#Admin").style.left = this.adminPos
-
+		this.adminPos = document.querySelector("#game").getBoundingClientRect().width
 		this.adminWidth = document.querySelector("#Admin").getBoundingClientRect().width
 	},
 /*	watch: {
@@ -137,9 +139,6 @@ export default {
 </script>
 
 <style>
-.app {
-	text-align: center;
-}
 #game {
 	width: 1200px;
 	height: 864px;
@@ -147,18 +146,19 @@ export default {
 	background-size: 100%;
 	background-repeat: no-repeat;
 	position: relative;
-	transform-origin: 50% 0;
+	transform-origin: 0 0;
 	transform: scale(0.77);
 	display: inline-block;
 }
 #Admin {
+	position: absolute;
 	width: 490px;
-	height: 100vh;
+	height: 864px;
 	display: block;
 	padding-top: 45px;
 	background: #ccc;
-	position: absolute;
 	top: 0;
+	right: 0;
 	font-family: Alliance;
 	font-size: 21px;
 	text-align: center;
