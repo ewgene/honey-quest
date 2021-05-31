@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/components/Login'
+//import Admin from '@/layouts/Admin'
+import Login from "@/components/Login"
 // import ViewContact from '@/components/ViewContact'
 // import NewContact from '@/components/NewContact'
 

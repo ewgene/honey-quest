@@ -6,29 +6,24 @@
 		<br />
 		<input class="input-style" 
 			placeholder="email" 
-			type="text"
-			name="email"
-			ref="email"
+			type="text" 
 			v-model="email">
 		<input class="input-style"
 			placeholder="password"
-			type="password"
-			name="password"
-			ref="password"
+			type="password" 
 			v-model="password">
-		<div class="radius-button" 
-			@click="logIn">Sign In</div>
+		<div class="radius-button" @click="logIn">Sign In</div>
 	</div>
 </template>
 
 <script>
-//import db from './firebaseInit'
-//import Admin from '../components/Admin.vue'
+import db from './firebaseInit'
 
 export default {
-	name: 'Login',
+	name: 'Admin',
 	data () {
 		return {
+			users: [],
 			isLogged: false,
 			isAdmin: false,
 			email: null,
@@ -36,10 +31,7 @@ export default {
 			active_user: null
 		}
 	},
-	props: [
-		'users'
-	],
-/*	created () {
+	created () {
 		db.collection('users').get().then((querySnapshot) => {
 			querySnapshot.forEach((doc) => {
 				let data = {
@@ -49,14 +41,14 @@ export default {
 					'surname': doc.data().surname,
 					'email': doc.data().email,
 					'phone': doc.data().phone,
-					'subs_start': doc.data().subs_start,
-					'subs_end': doc.data().subs_end,
+					'sub_start': doc.data().sub_start,
+					'sub_end': doc.data().sub_end,
 					'role': doc.data().role
 				}
 				this.users.push(data)
 			})
 		})
-	},*/
+	},
 	methods: {
 		logIn() {
 			let self = this;
@@ -70,32 +62,12 @@ export default {
 						if(self.users[i].role=='admin') {
 							self.isAdmin = true;
 						}
+						self.$emit('logged', 'true');
 					}
-					self.$emit('logged', self.active_user);
 				}
 			}
 		}
 	}
 }
 </script>
-
-<style scoped>
-	.login {
-		font-family: Alliance;
-		font-size: 21px;
-		text-align: center;
-	}
-	p {
-		font-size: 36px;
-		text-align: center;
-		line-height: 1.2;
-		color: #008B94;
-	}
-	.logo {
-		width: 100px;
-		filter: drop-shadow(0 0 3px rgba(100,0,0,0.5));
-		margin: 0 auto;
-		display: block;
-	}
-</style>
 

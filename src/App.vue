@@ -1,7 +1,8 @@
 <template>
 <div class="app">
 	<transition name="slide-fade">
-		<div id="game" v-if="isLogged">
+		<div id="game" 
+			v-if="isLogged&&!isAdmin">
 
 			<div v-for="pot in pots_selected"
 			v-bind:key="pot.x"
@@ -12,14 +13,18 @@
 
 		</div>
 	</transition>
-	<div id="Admin" :style="{position: 'absolute', left:adminPos+'px'}">
-		<Login v-on:logged="loginCheck" />
+	<div id="Admin" 
+		:style="{position: 'absolute', left:adminPos+'px'}"
+		v-if="!isLogged||isAdmin">
+		<Admin v-on:logged="loginCheck" />
 	</div>
 </div>
 </template>
 
 <script>
-import Login from './components/Login.vue';
+//import router from './router'
+
+import Admin from './layouts/Admin.vue';
 import Card from './components/Card.vue';
 import pots from './scripts/matrix.json'
 
@@ -29,6 +34,7 @@ export default {
 			pots: pots,
 			pots_selected: [],
 			isLogged: false,
+			isAdmin: false,
 			fullScreen: false,
 			adminPos: null,
 			adminWidth: null,
@@ -38,7 +44,7 @@ export default {
 	},
 	components: {
 		'Card': Card,
-		'Login': Login
+		'Admin': Admin
 	},
 	created: function() {
 
@@ -82,7 +88,15 @@ export default {
 			}
 		},
 		loginCheck(value) {
-			this.isLogged = value;
+			let self = this;
+			if(value=="admin") { 
+				self.isAdmin = true;
+				self.isLogged = false;
+			} 
+			if(value=="user") {
+				self.isAdmit= false;
+				self.isLogged = true;
+			}
 		}
 	},
 	mounted: function () {
@@ -152,16 +166,13 @@ export default {
 	display: inline-block;
 }
 #Admin {
-	width: 490px;
+	width: 600px;
 	height: 100vh;
 	display: block;
 	padding-top: 45px;
 	background: #ccc;
 	position: absolute;
 	top: 0;
-	font-family: Alliance;
-	font-size: 21px;
-	text-align: center;
 }
 .app:fullscreen: {
 	text-align: center;
@@ -172,19 +183,6 @@ export default {
 .app:fullscreen #game {	
 	transform: scale(0.9);
 	transform-origin: 50% 0;
-}
-
-p {
-	font-size: 36px;
-	text-align: center;
-	line-height: 1.2;
-	color: #008B94;
-}
-.logo {
-	width: 100px;
-	filter: drop-shadow(0 0 3px rgba(100,0,0,0.5));
-	margin: 0 auto;
-	display: block;
 }
 .card {
 	position: absolute;

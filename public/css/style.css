@@ -2,7 +2,7 @@
 @font-face {
 	font-family: 'Alliance';
 	src: url("../AllianceC-Bold.otf");
-	font-weight: 400;
+	font-weight: 600;
 	font-style: normal;
 }
 
@@ -19,7 +19,6 @@
 	font-weight: 400;
 	font-style: italic;
 }
-
 /* @font-face {
 	font-family: 'ish-open';
 	src: url("../fonts/OpenSans-Bold.ttf");
@@ -160,8 +159,7 @@
 }
 
 body {
-	font-family: 'ish-open', sans-serif;
-	font-size: 16px;
+	i
 	background-color: #fff;
 	letter-spacing: 0.02em;
 	overflow: hidden;
