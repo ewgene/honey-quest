@@ -94,7 +94,7 @@ export default {
 				self.isLogged = false;
 			} 
 			if(value=="user") {
-				self.isAdmit= false;
+				self.isAdmin= false;
 				self.isLogged = true;
 			}
 		}
