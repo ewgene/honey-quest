@@ -102,8 +102,7 @@ export default {
 		return {
 			isChanged: false,
 			isEdited: [],
-			isNew: false,
-			index: null
+			isNew: false
 		}
 	},
 	watch: { 
@@ -125,17 +124,18 @@ export default {
 		findChange($event) {
 			let self = this;
 			let dump = {};
+			let index = null;
 			let target = $event.currentTarget;
 			let ename = target.getAttribute('data-key');
 			console.log(ename);
 			let value = target.value;
 			dump[ename] = value;
-			self.index = Object.keys(self.user).indexOf(ename);
-			console.log(self.index);
-			if(self.isEdited.includes(self.index)) {
+			index = Object.keys(self.user).indexOf(ename);
+			console.log(dump);
+			if(self.isEdited.includes(index)) {
 				console.log('nop!');
 			} else {
-				self.isEdited.push(self.index);
+				self.isEdited.push(index);
 			}
 		},
 		valDate(e) {
@@ -143,7 +143,7 @@ export default {
 			console.log(e.keyCode)
 			if(e.keyCode < 47 || e.keyCode > 57) {
 				console.log(e.keyCode < 47 || e.keyCode > 57)
-				e.preventDefault();
+				target.preventDefault();
 			}
 			let len = target.value.length;
 			if(len !== 1 || len !== 3) {
@@ -160,7 +160,7 @@ export default {
 		},
 		saveUser() {
 			let self = this;
-			self.$emit('save', [ self.user, self.isEdited ]);
+			self.$emit('save', self.user);
 		},
 		addUser() {
 			let self = this;
@@ -217,6 +217,7 @@ export default {
 	}
 	.user-head {
 		color: #008B94;
+		background: transparent;
 		font-size: 20px;
 		font-weight: bold;
 		margin: 0;
