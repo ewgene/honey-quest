@@ -10,7 +10,6 @@
 	"dependencies": {
 		"core-js": "^3.6.5",
 		"firebase": "^8.4.3",
-		"moment": "^2.29.1",
 		"vue": "^2.6.11",
 		"vue-firestore": "^0.3.30",
 		"vue-flip": "1.0.2",
@@ -39,7 +38,9 @@
 			"parser": "babel-eslint"
 		},
 		"rules": {
-			"no-console": "off"
+			"no-console": "off",
+			"no-empty": 0,
+			"no-trailing-whitespace": 0
 		}
 	},
 	"browserslist": [

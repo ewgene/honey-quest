@@ -6,7 +6,7 @@
 		<br />
 		<input class="input-style" 
 			placeholder="email" 
-			type="text"
+			type="email"
 			name="email"
 			ref="email"
 			v-model="email">
@@ -16,8 +16,12 @@
 			name="password"
 			ref="password"
 			v-model="password">
+			
+		<p class="error">{{err}}</p>
+
 		<div class="radius-button" 
-			@click="logIn">Sign In</div>
+			@click="logIn">Вход
+		</div>
 	</div>
 </template>
 
@@ -33,45 +37,44 @@ export default {
 			isAdmin: false,
 			email: null,
 			password: null,
-			active_user: null
+			active_user: null,
+			err: ''
 		}
 	},
 	props: [
 		'users'
 	],
-/*	created () {
-		db.collection('users').get().then((querySnapshot) => {
-			querySnapshot.forEach((doc) => {
-				let data = {
-					'password': doc.data().password,
-					'id': doc.data().id,
-					'name': doc.data().name,
-					'surname': doc.data().surname,
-					'email': doc.data().email,
-					'phone': doc.data().phone,
-					'subs_start': doc.data().subs_start,
-					'subs_end': doc.data().subs_end,
-					'role': doc.data().role
-				}
-				this.users.push(data)
-			})
-		})
-	},*/
 	methods: {
 		logIn() {
 			let self = this;
 			for (var i = 0; i < self.users.length; i++) {
 				if (self.users[i].email == self.email) {
+
 					if(self.users[i].password == self.password) {
-						self.isLogged = true;
-						self.active_user = self.users[i];
-						self.email = '';
-						self.password = '';
-						if(self.users[i].role=='admin') {
-							self.isAdmin = true;
+						console.log(self.users[i].subs_start,self.users[i].subs_end)
+						if (Date.parse(self.users[i].subs_end) > Date.now()
+							&& Date.parse(self.users[i].subs_start) < Date.now()) {
+
+								self.isLogged = true;
+								self.active_user = self.users[i];
+								self.email = '';
+								self.password = '';
+								if(self.users[i].role == 'admin') {
+									self.isAdmin = true;
+								}
+
+						} else {
+							self.err = "Проверьте подписку";
+							document.querySelector(".error").style.opacity = 1;
+							console.log(self.users[i].subs_start);
+							break;
 						}
 					}
 					self.$emit('logged', self.active_user);
+				}
+				else {
+					self.err = "Неверный логин или пароль";
+					document.querySelector(".error").style.opacity = 1; 
 				}
 			}
 		}
@@ -96,6 +99,12 @@ export default {
 		filter: drop-shadow(0 0 3px rgba(100,0,0,0.5));
 		margin: 0 auto;
 		display: block;
+	}
+	.error {
+		font-family: 'ish-open';
+		font-size: 12px;
+		color: #f00;
+		opacity: 0;
 	}
 </style>
 

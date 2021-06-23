@@ -108,22 +108,6 @@ export default {
 
 		this.adminWidth = document.querySelector("#Admin").getBoundingClientRect().width
 	},
-/*	watch: {
-		isFull: function() {
-			var self = this
-			if(screen.height == self.Wh) {
-				self.fullSreen = true
-				document.querySelector("#game").style.left = self.adminWidth/4+'px'
-				document.querySelector("#game").style.transform = 'scale(0.9)'
-				document.querySelector("#Admin").style.display = "none"
-			} else {	
-				self.fullSreen = false
-				document.querySelector("#game").style.left = "0"
-				document.querySelector("#game").style.transform = 'scale(0.73)'
-				document.querySelector("#Admin").style.display = "block"
-			}
-		}
-	},*/
 	computed: {
 		select_pots: function () {
 			var amount = 11,

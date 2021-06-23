@@ -1,101 +1,110 @@
 <template>
 	<div id="Editor">
+
 		<div class="wrapper user">
+
 			<input class="user-head input-style"
-				name="name"
-				ref="name"
+				data-key="name"
+				placeholder="Имя"
 				v-on:change="findChange"
 				v-model="user.name">
 			<input class="user-head input-style"
-				name="surname"
-				ref="surname" 
+				data-key="surname"
+				placeholder="Фамилия" 
 				v-on:change="findChange"
 				v-model="user.surname">
+
+			<div class="clear"></div>
+
 			<div class="inner">
 				<div class="left">
 					<input 
 						type="email" 
 						class="input-style sub"
-						name="email"
-						ref="email"
+						data-key="email"
+						placeholder="Почта"
 						v-on:change="findChange"
 						v-model="user.email">
-					<input class="input-style sub" 
-						v-model="user.subs_start">
 				</div>
 				<div class="right">
 					<input 
 						type="tel" 
 						class="input-style sub"
-						name="phone"
-						ref="phone"
+						data-key="phone"
+						placeholder="Телефон"
 						v-on:change="findChange"
 						v-model="user.phone">
-					<input class="input-style sub" 
-						v-model="user.subs_end">
 				</div>
 			</div>
+
+			<div class="clear"></div>
+
 			<div class="inner">
 				<div class="left">
-					<input 
-						class="sub input-style"
-						name="login"
-						ref="login"
-						v-on:change="findChange"
+					<input
+						class="sub input-style date"
+						data-key="sub_start"
+						placeholder="dd/mm/yy"
+						v-on:keyup="valDate($event)"
 						v-model="user.subs_start">
 				</div>
 				<div class="right">
 					<input
-						type="number" 
-						class="sub input-style" 
-						name="id"
-						ref="id"
-						v-on:change="findChange"
+						class="sub input-style date" 
+						data-key="subs_end"
+						placeholder="dd/mm/yy"
+						v-on:keyup="valDate($event)"
 						v-model="user.subs_end">
 				</div>
+			</div>
+
+			<div class="clear"></div>
+
 			<div class="inner">
 				<div class="left">
 					<input 
 						class="sub input-style"
-						name="login"
-						ref="login"
+						data-key="role"
+						placeholder="Роль"
 						v-on:change="findChange"
-						v-model="user.login">
+						v-model="user.role">
 				</div>
 				<div class="right">
 					<input
-						type="number" 
 						class="sub input-style" 
-						name="id"
-						ref="id"
+						data-key="password"
+						placeholder="Пароль"
 						v-on:change="findChange"
-						v-model="user.id">
+						v-model="user.password">
 				</div>
 			</div>
+
+			<div class="clear"></div>
+
 			<div class="control">
 				<div class="radius-button" 
-					@click="saveUser">Save</div>
+					@click="addUser">Сохранить</div>
 				</div>
 				<div class="radius-button" 
-					@click="cancel">Cansel</div>
+					@click="cancel">Отмена</div>
 			</div>
+
 		</div>
-	</div>
+
 </template>
 
 <script>
 
 export default {
 	name: 'Modal',
-	props: [ 'user'	],
+	props: [ 'user' ],
 	data () {
-		let data = {
+		return {
+			isChanged: false,
+			isEdited: [],
 			isNew: false,
-			isChanged: null,
-			isEdited: false
+			index: null
 		}
-		data = Object.assign({}, data, this.user)
-		return data
 	},
 	watch: { 
 		user: {
@@ -104,36 +113,91 @@ export default {
 				this.isChanged = true;
 			}
 		}
-	},
-	computed: function () {
+	},	
+	/*	computed: function () {
 		if(!this.user) {
 			this.isNew == true
 		} else {
 			this.isNew == false
 		}
-	},
+	},*/
 	methods: {
 		findChange($event) {
 			let self = this;
-			self.isEdited = true;
-			let ename = $event.name;
-			let value = $event.value;
-			self.isChanged = JSON.toString({[ename]: value});
+			let dump = {};
+			let target = $event.currentTarget;
+			let ename = target.getAttribute('data-key');
+			console.log(ename);
+			let value = target.value;
+			dump[ename] = value;
+			self.index = Object.keys(self.user).indexOf(ename);
+			console.log(self.index);
+			if(self.isEdited.includes(self.index)) {
+				console.log('nop!');
+			} else {
+				self.isEdited.push(self.index);
+			}
 		},
-		saveUser () {
+		valDate(e) {
+			let target = e.currentTarget;
+			console.log(e.keyCode)
+			if(e.keyCode < 47 || e.keyCode > 57) {
+				console.log(e.keyCode < 47 || e.keyCode > 57)
+				e.preventDefault();
+			}
+			let len = target.value.length;
+			if(len !== 1 || len !== 3) {
+				if(e.keyCode == 47) {
+					e.preventDefault();
+				}
+			}
+			if(len === 2) {
+				target.value += '/';
+			}
+			if(len === 5) {
+				target.value += '/';
+			}
+		},
+		saveUser() {
 			let self = this;
-			self.$emit('save', self.isChanged);
+			self.$emit('save', [ self.user, self.isEdited ]);
 		},
-		addUser () {
+		addUser() {
 			let self = this;
-			self.$emit('add', self.target)
+			self.$emit('add', self.user);
 		},
-		cancel () {
-			self.$emit('close');
+		deleteUser() {
+			this.$emit('delete', this.user.id);
+		},
+		cancel() {
 			self.user = null;
+			this.$emit('close');
 		}
-	}
+	},
+/*	mounted () {
+		let input = document.querySelectorAll('.date');
+  
+		window.addEventListener('keypress', function(e) {
+			let target = e.currentTarget;
+			if(e.keyCode < 47 || e.keyCode > 57) {
+				e.preventDefault();
+			}
+			let len = target.value.length;
+			if(len !== 1 || len !== 3) {
+				if(e.keyCode == 47) {
+					e.preventDefault();
+				}
+			}
+			if(len === 2) {
+				target.value += '/';
+			}
+			if(len === 5) {
+				target.value += '/';
+			}
+		})
+	}*/ 
 }
+
 
 </script>
 
@@ -145,6 +209,11 @@ export default {
 		left: 0;
 		background-color: #fff;
 		outline: 5px solid #008B94;
+		border-radius: 30px;
+	}
+	.user {
+		height: max-content;
+		margin-top: 20px;
 	}
 	.user-head {
 		color: #008B94;
@@ -157,6 +226,19 @@ export default {
 	}
 	.sub {
 		width: 90%;
+	}
+	.clear {
+		width: 100%;
+		height: 1px;
+		background: transparent;
+	}
+	.left, .right {
+		float: none;
+		display: inline-block;
+		text-align: left;
+	}
+	.inner input {
+		display: inline-block;
 	}
 
 </style>
