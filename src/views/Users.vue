@@ -2,7 +2,7 @@
 	<div class="wrapper users">
 
 		<h1>КЛИЕНТЫ</h1>
-		<div class="icon-button" @click="addUser">
+		<div class="icon-button" :isNew="true" @click="addUser">
 			<i class="fa fa-user-plus" aria-hidden="true"></i>
 			<span class="sub">Новый клиент</span>
 		</div>
@@ -79,9 +79,11 @@ export default {
 				'subs_end': '',
 				'role': ''
 			}
-			this.isNew = true;
-			console.log(this.isNew);
-			this.$emit('modal', newUser);
+			this.isNew = true
+			this.$emit('modal', newUser)
+		},
+		editUser (event, user) {
+			this.$emit('save', user);
 		},
 		deleteUser(event, id) {
 			console.log(id);
