@@ -21,7 +21,9 @@
 			<div v-if="isVisible">
 				<Modal 
 					:user="user"
+					:isNew="isNew"
 					@add="addUser(user)"
+					@save="saveUser(user)"
 					@close="hideModal"
 					v-show="isVisible"
 					/>
@@ -48,6 +50,7 @@ export default {
 		return {
 			isAdmin: false,
 			isVisible: false,
+			isNew: false,
 			users: [],
 			user: '',
 			active_user: false,
@@ -68,23 +71,6 @@ export default {
 						'subs_end': doc.data().subs_end,
 						'role': doc.data().role
 					}
-				/*	arr.subs_start = 
-						Date(
-						arr.subs_start)
-						.toISOString()
-						.substr(0,10
-						).split('-')
-						.reverse()
-						.join('/')
-					arr.subs_end = 
-						arr.subs_end
-						.toDate()
-						.toISOString()
-						.substr(0,10)
-						.split('-')
-						.reverse()
-						.join('/')*/
-
 					this.users.push(arr)
 				})
 			})
@@ -101,20 +87,36 @@ export default {
 		showModal(value) {
 			let self = this;
 			self.user = value;
+			console.log(value.id)
+			if(value.id!==null || value.id!=='undefined') {
+				self.isNew = false
+			}
+			else { 
+				self.isNew = true 
+			}
 			self.isVisible = true;
 		},
 		addUser(value) {
-			db.collection('users').add(value)
-			console.log(value)
-			this.users = []
-			this.getList()
-			this.hideModal()
+			db.collection('users').add(value).then(() => {
+				this.users = []
+				this.getList()
+				this.hideModal()
+			})
+		},
+		saveUser(value) {
+			db.collection('users').doc(value.id).set(value).then(() => {
+				this.users = []
+				this.getList()
+				this.hideModal()
+				console.log('save')
+			})
 		},
 		deleteUser(value) {
 			console.log(value)
-			db.collection('users').doc(value).delete()
-			this.users = []
-			this.getList()
+			db.collection('users').document(value).delete().then(() => {
+				this.users = []
+				this.getList()
+			})
 		},
 		hideModal() {
 			let self = this;
