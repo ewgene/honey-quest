@@ -45,15 +45,22 @@ export default {
 		'users'
 	],
 	methods: {
+		parseDate(date) {
+			let dateParts = date.split("/")
+			let tDate = new Date("20"+dateParts[2], dateParts[1]-1, +dateParts[0])
+			return tDate
+		},
 		logIn() {
 			let self = this;
 			for (var i = 0; i < self.users.length; i++) {
 				if (self.users[i].email == self.email) {
 
 					if(self.users[i].password == self.password) {
-						console.log(self.users[i].subs_start,self.users[i].subs_end)
-						if (Date.parse(self.users[i].subs_end) > Date.now()
-							&& Date.parse(self.users[i].subs_start) < Date.now()) {
+						let start = self.parseDate(self.users[i].subs_start)
+						let end = self.parseDate(self.users[i].subs_end)
+						console.log(start,Date.now(),end)
+						if (end > Date.now()
+							&& start < Date.now()) {
 
 								self.isLogged = true;
 								self.active_user = self.users[i];
