@@ -83,7 +83,7 @@
 
 			<div class="control">
 				<div class="radius-button" 
-					@click="addUser">Сохранить</div>
+					@click="isNew ? addUser() : saveUser()">Сохранить</div>
 				</div>
 				<div class="radius-button" 
 					@click="cancel">Отмена</div>
@@ -101,7 +101,7 @@ export default {
 	data () {
 		return {
 			isChanged: false,
-			isEdited: [],
+			isEdited: {},
 			isNew: false
 		}
 	},
@@ -122,80 +122,55 @@ export default {
 	},*/
 	methods: {
 		findChange($event) {
-			let self = this;
 			let dump = {};
-			let index = null;
-			let target = $event.currentTarget;
+			let target = $event.currentTarget
 			let ename = target.getAttribute('data-key');
-			console.log(ename);
-			let value = target.value;
-			dump[ename] = value;
-			index = Object.keys(self.user).indexOf(ename);
-			console.log(dump);
-			if(self.isEdited.includes(index)) {
-				console.log('nop!');
-			} else {
-				self.isEdited.push(index);
-			}
+			let value = target.value
+			dump[ename] = value
 		},
-		valDate(e) {
-			let target = e.currentTarget;
-			console.log(e.keyCode)
-			if(e.keyCode < 47 || e.keyCode > 57) {
-				console.log(e.keyCode < 47 || e.keyCode > 57)
-				target.preventDefault();
+		valDate($event) {
+			let target = $event.currentTarget
+			console.log($event.keyCode)
+			if($event.keyCode < 47 || $event.keyCode > 57) {
+				console.log($event.keyCode < 47 || $event.keyCode > 57)
+				$event.preventDefault()
 			}
-			let len = target.value.length;
+			let len = target.value.length
 			if(len !== 1 || len !== 3) {
-				if(e.keyCode == 47) {
-					e.preventDefault();
+				if($event.keyCode == 47) {
+					return false
 				}
 			}
 			if(len === 2) {
-				target.value += '/';
+				target.value += '/'
 			}
 			if(len === 5) {
-				target.value += '/';
+				target.value += '/'
 			}
 		},
 		saveUser() {
 			let self = this;
-			self.$emit('save', self.user);
+			self.$emit('save', self.user)
+			console.log('save')
 		},
 		addUser() {
 			let self = this;
-			self.$emit('add', self.user);
+			self.$emit('add', self.user)
+			console.log('add')
 		},
 		deleteUser() {
-			this.$emit('delete', this.user.id);
+			this.$emit('delete', this.user.id)
 		},
 		cancel() {
-			self.user = null;
-			this.$emit('close');
+			self.user = null
+			self.isNew = false
+			this.$emit('close')
 		}
 	},
-/*	mounted () {
-		let input = document.querySelectorAll('.date');
-  
-		window.addEventListener('keypress', function(e) {
-			let target = e.currentTarget;
-			if(e.keyCode < 47 || e.keyCode > 57) {
-				e.preventDefault();
-			}
-			let len = target.value.length;
-			if(len !== 1 || len !== 3) {
-				if(e.keyCode == 47) {
-					e.preventDefault();
-				}
-			}
-			if(len === 2) {
-				target.value += '/';
-			}
-			if(len === 5) {
-				target.value += '/';
-			}
-		})
-	}*/ 
+created () {
+		this.user.id == undefined ? this.isNew = true : this.isNew = false
+		console.log(this.user.id)
+	}
 }
 
 
@@ -205,13 +180,15 @@ export default {
 
 	#Editor {
 		position: absolute;
-		top: 45px;
-		left: 0;
+		width: 100%;
+		top: 40px;
+		left: -5px;
 		background-color: #fff;
-		outline: 5px solid #008B94;
+		border: 5px solid #008B94;
 		border-radius: 30px;
 	}
 	.user {
+		background: transparent;
 		height: max-content;
 		margin-top: 20px;
 	}
