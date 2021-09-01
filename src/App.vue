@@ -1,15 +1,10 @@
 <template>
 <div class="app">
 	<transition name="slide-fade">
-		<div id="game" 
+		<div
 			v-if="isLogged&&!isAdmin">
 
-			<div v-for="pot in pots_selected"
-			v-bind:key="pot.x"
-			:style="{position: 'absolute', top:pot.y, left:pot.x}" 
-			class="card">
-				<Card v-bind:active="pot.full" />
-			</div>
+			<Game :key="restartKey" @restart="restartGame"/>
 
 		</div>
 	</transition>
@@ -25,28 +20,31 @@
 //import router from './router'
 
 import Admin from './layouts/Admin.vue';
-import Card from './components/Card.vue';
-import pots from './scripts/matrix.json'
+import Game from './components/Game.vue'
+//import Card from './components/Card.vue';
+//import pots from './scripts/matrix.json'
 
 export default {
 	data() {
 		return {
-			pots: pots,
-			pots_selected: [],
+/*			pots: pots,
+			pots_selected: [], */
 			isLogged: false,
 			isAdmin: false,
 			fullScreen: false,
 			adminPos: null,
 			adminWidth: null,
-//			scrHeight: screen.height,
-//			winHeight: window.innerHeight
+			restartKey: 0
+/*			scrHeight: screen.height,
+			winHeight: window.innerHeight,
+			gameScale: null */
 		}
 	},
 	components: {
-		'Card': Card,
+		'Game': Game,
 		'Admin': Admin
 	},
-	created: function() {
+/*	created: function() {
 
 		var i = 0
 		while ( i < this.select_pots.length ) {
@@ -58,7 +56,7 @@ export default {
 			i++
 		}
 		
-	},
+	}, */
 	methods: {
 		screen() {
 			let self = this;
@@ -97,6 +95,9 @@ export default {
 				self.isAdmin= false;
 				self.isLogged = true;
 			}
+		},
+		restartGame() {
+			this.restartKey += 1
 		}
 	},
 	mounted: function () {
@@ -105,10 +106,14 @@ export default {
 			- document.querySelector("#Admin").getBoundingClientRect().width/2
 
 		document.querySelector("#Admin").style.left = this.adminPos
+		document.querySelector("#Admin").style.height = window.innerHeight+'px'
+		console.log(window.innerHeight)
 
 		this.adminWidth = document.querySelector("#Admin").getBoundingClientRect().width
-	},
-	computed: {
+
+		// this.gameScale = (window.innerHeight/8.64)/100
+	}	
+/*	computed: {
 		select_pots: function () {
 			var amount = 11,
 			lower_bound = 0,
@@ -129,7 +134,7 @@ export default {
 			var active = Math.floor(Math.random()*size);
 			return active;
 		}
-	}
+	} */
 }
 
 </script>
@@ -146,12 +151,10 @@ export default {
 	background-repeat: no-repeat;
 	position: relative;
 	transform-origin: 50% 0;
-	transform: scale(0.77);
 	display: inline-block;
 }
 #Admin {
 	width: 600px;
-	height: 100vh;
 	display: block;
 	padding-top: 45px;
 	background: #ccc;
