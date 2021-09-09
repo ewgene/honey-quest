@@ -47,7 +47,9 @@ export default {
 	methods: {
 		parseDate(date) {
 			let dateParts = date.split("/")
-			let tDate = new Date("20"+dateParts[2], dateParts[1]-1, +dateParts[0])
+			if(dateParts[2].length < 3) dateParts[2] = "20"+dateParts[2]
+			let tDate = new Date(dateParts[2], dateParts[1]-1, +dateParts[0])
+			console.log(dateParts[2])
 			return tDate
 		},
 		logIn() {

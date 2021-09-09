@@ -28,7 +28,7 @@
 				</div>
 				<div class="right">
 					<input 
-						type="tel" 
+						type="number" 
 						class="input-style sub"
 						data-key="phone"
 						placeholder="Телефон"
@@ -43,17 +43,19 @@
 				<div class="left">
 					<input
 						class="sub input-style date"
+						type="number"
 						data-key="sub_start"
 						placeholder="dd/mm/yy"
-						v-on:keyup="valDate($event)"
+						v-on:keypress="valDate($event)"
 						v-model="user.subs_start">
 				</div>
 				<div class="right">
 					<input
-						class="sub input-style date" 
+						class="sub input-style date"
+						type="number"
 						data-key="subs_end"
 						placeholder="dd/mm/yy"
-						v-on:keyup="valDate($event)"
+						v-on:keypress="valDate($event)"
 						v-model="user.subs_end">
 				</div>
 			</div>
@@ -128,25 +130,31 @@ export default {
 			let value = target.value
 			dump[ename] = value
 		},
-		valDate($event) {
-			let target = $event.currentTarget
-			console.log($event.keyCode)
-			if($event.keyCode < 47 || $event.keyCode > 57) {
-				console.log($event.keyCode < 47 || $event.keyCode > 57)
-				$event.preventDefault()
+		valDate(evt) {
+			let target = evt.currentTarget
+			console.log(evt.which)
+			var charCode = evt.which
+			if(charCode < 47 || charCode > 57) {
+				console.log(charCode < 47 || charCode > 57)
+				evt.preventDefault()
+			} else {
+				return true
 			}
 			let len = target.value.length
-			if(len !== 1 || len !== 3) {
-				if($event.keyCode == 47) {
+			/* if(len !== 1 || len !== 3) {
+				if(charCode == 47) {
 					return false
 				}
-			}
+			}*/
 			if(len === 2) {
 				target.value += '/'
+				console.log('2')
 			}
 			if(len === 5) {
 				target.value += '/'
+				console.log('5')
 			}
+			console.log(len)
 		},
 		saveUser() {
 			let self = this;

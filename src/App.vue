@@ -4,14 +4,18 @@
 		<div
 			v-if="isLogged&&!isAdmin">
 
-			<Game :key="restartKey" @restart="restartGame"/>
+			<Game 
+				:key="restartKey" 
+				@restart="restartGame"/>
 
 		</div>
 	</transition>
 	<div id="Admin" 
 		:style="{position: 'absolute', left:adminPos+'px'}"
 		v-if="!isLogged||isAdmin">
+		
 		<Admin v-on:logged="loginCheck" />
+
 	</div>
 </div>
 </template>
@@ -31,13 +35,11 @@ export default {
 			pots_selected: [], */
 			isLogged: false,
 			isAdmin: false,
+			//isMobile: false,
 			fullScreen: false,
 			adminPos: null,
 			adminWidth: null,
 			restartKey: 0
-/*			scrHeight: screen.height,
-			winHeight: window.innerHeight,
-			gameScale: null */
 		}
 	},
 	components: {
@@ -102,39 +104,23 @@ export default {
 	},
 	mounted: function () {
 		this.adminPos = 
-			document.querySelector(".app").getBoundingClientRect().width/2 
-			- document.querySelector("#Admin").getBoundingClientRect().width/2
+			document.querySelector(".app")
+				.getBoundingClientRect().width/2 
 
-		document.querySelector("#Admin").style.left = this.adminPos
-		document.querySelector("#Admin").style.height = window.innerHeight+'px'
+			- document.querySelector("#Admin")
+				.getBoundingClientRect().width/2
+
+		document.querySelector("#Admin")
+			.style.left = this.adminPos
+		document.querySelector("#Admin")
+			.style.height = window.innerHeight+'px'
 		console.log(window.innerHeight)
 
-		this.adminWidth = document.querySelector("#Admin").getBoundingClientRect().width
+		this.adminWidth = document.querySelector("#Admin").
+			getBoundingClientRect().width
 
-		// this.gameScale = (window.innerHeight/8.64)/100
-	}	
-/*	computed: {
-		select_pots: function () {
-			var amount = 11,
-			lower_bound = 0,
-			upper_bound = 21,
-			pots_selected = []
-
-			while (pots_selected.length < amount) {
-				var rn = 
-					Math.floor(Math.random()*(upper_bound - lower_bound) + lower_bound);
-					if (pots_selected.indexOf(rn) == -1) { 
-						pots_selected.push(rn);
-					}
-			}
-			return pots_selected;
-		},
-		select_active: function () {
-			var size = 11;
-			var active = Math.floor(Math.random()*size);
-			return active;
-		}
-	} */
+		this.gameScale = (window.innerHeight/8.64)/100
+	}
 }
 
 </script>
@@ -154,7 +140,8 @@ export default {
 	display: inline-block;
 }
 #Admin {
-	width: 600px;
+	width: 50%;
+	max-width: 600px;
 	display: block;
 	padding-top: 45px;
 	background: #ccc;

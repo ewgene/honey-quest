@@ -17,6 +17,7 @@
 
 import VueFlip from 'vue-flip';
 import flipSound from '../assets/flip.wav';
+import flipSoundA from '../assets/flip_active.wav';
 
 export default {
 	
@@ -27,13 +28,22 @@ export default {
 	props: ["active"],
 	data: function() {
 		return {
-			flipSound: flipSound
+			flipSound: flipSound,
+			flipSoundA: flipSoundA
 		}
 	},
   methods: {
 		play() {
-			var audio = new Audio(flipSound);
-			audio.play();
+			let s
+			if(this.active === true) {
+				s = this.flipSoundA 
+			}else { 
+				s = this.flipSound
+			}
+			console.log(s)
+			console.log(this.active)
+			var audio = new Audio(s)
+			audio.play()
 		}
   },
 	/*created: {

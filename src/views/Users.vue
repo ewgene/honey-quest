@@ -2,7 +2,11 @@
 	<div class="wrapper users">
 
 		<h1>КЛИЕНТЫ</h1>
-		<div class="icon-button" :isNew="true" @click="addUser">
+		<div class="icon-button exit" @click="logOut">
+			<i class="fa fa-sign-out" aria-hidden="true"></i>
+			<span class="sub">Выйти</span>
+		</div>
+		<div class="icon-button new" :isNew="true" @click="addUser">
 			<i class="fa fa-user-plus" aria-hidden="true"></i>
 			<span class="sub">Новый клиент</span>
 		</div>
@@ -70,6 +74,7 @@ export default {
 		},
 		addUser() {
 			let newUser = {
+				'id': '',
 				'password': '',
 				'name': '',
 				'surname': '',
@@ -88,7 +93,10 @@ export default {
 		deleteUser(event, id) {
 			console.log(id);
 			this.$emit('delete', id);
-		}
+		},
+		logOut() {
+			window.location.reload()
+		},
 	}
 }
 </script>
@@ -105,18 +113,24 @@ export default {
 .users > .icon-button {
 	position: absolute;
 	top: 40px;
-	right: 10px;
 	width: 100px;
 	font-family: ish-open;
 	font-size: 32px;
 	text-align: center;
 	color: #008B94;
 }
+.users > .icon-button.new {
+	right: 25px;
+}
+.users > .icon-button.exit {
+	left: 10px;
+}
 .users > .icon-button .sub {
 	color: #008B94;
 	position: absolute;
 	left: 0;
 	bottom: -15px;
+	width: 100%;
 }
 .user {		
 	margin-top: 30px;

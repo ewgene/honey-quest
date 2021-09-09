@@ -30,6 +30,8 @@ export default {
 	],
 	data() {
 		return {
+			isMobile: false,
+			isLandscape: false,
 			pots: pots,
 			pots_selected: [],
 			pot_active: null,
@@ -88,16 +90,6 @@ export default {
 		buildGame() {
 			this.select_pots()
 			this.select_active()
-/*			var i = 0
-			while ( i < this.select_pots.length ) {
-				let sel = this.select_pots[i]
-				if( i == this.pot_active) {
-					this.select_pots[i].full = true
-				}
-				console.log(sel)
-				this.pots_selected.push(sel)
-				i++
-			}*/
 		},
 		restartGame() {
 			this.pots_selected = []
@@ -107,6 +99,11 @@ export default {
 	},
 	mounted: function () {
 		this.gameScale = (window.innerHeight/8.64)/100
+		this.isMobile = /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)
+		this.isLandscape = window.screen.orientation.type=="landscape-primary"
+		if(this.isMobile === true && this.isLandscape)
+			document.querySelector("#game").style.left = "-30%"
+		console.log(this.isLandscape)
 	}
 }
 </script>
