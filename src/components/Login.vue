@@ -4,23 +4,25 @@
 		<img class="logo" src='../assets/logo-sm.svg'>
 		<p class="head">THE BEARSFORD GAMES</p>
 		<br />
-		<input class="input-style" 
-			placeholder="email" 
-			type="email"
-			name="email"
-			ref="email"
-			v-model="email">
-		<input class="input-style"
-			placeholder="password"
-			type="password"
-			name="password"
-			ref="password"
-			v-model="password">
-			
-		<p class="error">{{err}}</p>
+		<div class="form-group">
+			<input class="input-style" 
+				placeholder="email" 
+				type="email"
+				name="email"
+				ref="email"
+				v-model="email">
+			<input class="input-style"
+				placeholder="password"
+				type="password"
+				name="password"
+				ref="password"
+				v-model="password">
+				
+			<p class="error">{{err}}</p>
 
-		<div class="radius-button" 
-			@click="logIn">Вход
+			<div class="radius-button" 
+				@click="logIn">Вход
+			</div>
 		</div>
 	</div>
 </template>
@@ -35,6 +37,7 @@ export default {
 		return {
 			isLogged: false,
 			isAdmin: false,
+			isMobile: false,
 			email: null,
 			password: null,
 			active_user: null,
@@ -47,9 +50,20 @@ export default {
 	methods: {
 		parseDate(date) {
 			let dateParts = date.split("/")
-			if(dateParts[2].length < 3) dateParts[2] = "20"+dateParts[2]
-			let tDate = new Date(dateParts[2], dateParts[1]-1, +dateParts[0])
+			
+			if(dateParts[2].length < 3) 
+			dateParts[2] 
+				= "20"
+				+dateParts[2]
+
+			let tDate 
+				= new Date(
+					dateParts[2], 
+					dateParts[1]-1, 
+					+dateParts[0])
+
 			console.log(dateParts[2])
+
 			return tDate
 		},
 		logIn() {

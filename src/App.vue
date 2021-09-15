@@ -5,6 +5,7 @@
 			v-if="isLogged&&!isAdmin">
 
 			<Game 
+				:isMobile="isMobile"
 				:key="restartKey" 
 				@restart="restartGame"/>
 
@@ -14,7 +15,7 @@
 		:style="{position: 'absolute', left:adminPos+'px'}"
 		v-if="!isLogged||isAdmin">
 		
-		<Admin v-on:logged="loginCheck" />
+		<Admin :isMobile="isMobile" v-on:logged="loginCheck" />
 
 	</div>
 </div>
@@ -25,8 +26,6 @@
 
 import Admin from './layouts/Admin.vue';
 import Game from './components/Game.vue'
-//import Card from './components/Card.vue';
-//import pots from './scripts/matrix.json'
 
 export default {
 	data() {
@@ -35,7 +34,8 @@ export default {
 			pots_selected: [], */
 			isLogged: false,
 			isAdmin: false,
-			//isMobile: false,
+			isMobile: false,
+			isLandscape: false,
 			fullScreen: false,
 			adminPos: null,
 			adminWidth: null,
@@ -46,19 +46,6 @@ export default {
 		'Game': Game,
 		'Admin': Admin
 	},
-/*	created: function() {
-
-		var i = 0
-		while ( i < this.select_pots.length ) {
-			var sel = this.select_pots[i]
-			if( i == this.select_active) {
-				this.pots[sel].full = true
-			}
-			this.pots_selected.push(this.pots[sel])
-			i++
-		}
-		
-	}, */
 	methods: {
 		screen() {
 			let self = this;
@@ -103,26 +90,62 @@ export default {
 		}
 	},
 	mounted: function () {
-		this.adminPos = 
-			document.querySelector(".app")
-				.getBoundingClientRect().width/2 
+		this.isMobile 
+			= /Android|webOS|iPhone|iPad|iPod/i
+			.test(navigator.userAgent)
 
-			- document.querySelector("#Admin")
+		this.isLandscape 
+			= window.screen.orientation.type=="landscape-primary"
+
+
+		if(this.isMobile === true) {
+
+			console.log(this.isMobile)
+
+			this.adminWidth = "100%"
+			this.adminPos = 0
+
+			let inPut = document.querySelectorAll('input')
+			inPut.forEach(element => {
+				element.style.width = "95%"
+			})
+			document.querySelector('.radius-button')
+				.style.width = "95%"
+				
+			console.log(document.querySelectorAll('input'))
+
+		} else {
+
+			this.adminWidth 
+			= document
+				.querySelector("#Admin")
+				.getBoundingClientRect()
+				.width
+				
+			this.adminPos = 
+			document
+			.querySelector(".app")
 				.getBoundingClientRect().width/2
+				- document.querySelector("#Admin")
+				.getBoundingClientRect().width/2
+		}
 
-		document.querySelector("#Admin")
-			.style.left = this.adminPos
 		document.querySelector("#Admin")
 			.style.height = window.innerHeight+'px'
-		console.log(window.innerHeight)
 
-		this.adminWidth = document.querySelector("#Admin").
-			getBoundingClientRect().width
-
-		this.gameScale = (window.innerHeight/8.64)/100
+		if(this.isMobile === true) { 
+			document
+			.querySelector("#Admin")
+			.style
+			.width = "100%"
+			
+			document
+			.querySelector("#Admin")
+			.style
+			.left = "0"
+		}
 	}
 }
-
 </script>
 
 <style>
@@ -140,7 +163,6 @@ export default {
 	display: inline-block;
 }
 #Admin {
-	width: 50%;
 	max-width: 600px;
 	display: block;
 	padding-top: 45px;

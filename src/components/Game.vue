@@ -26,11 +26,11 @@ import pots from '../scripts/matrix.json'
 
 export default {
 	props: [
-		'restartKey'
+		'restartKey',
+		'isMobile'
 	],
 	data() {
 		return {
-			isMobile: false,
 			isLandscape: false,
 			pots: pots,
 			pots_selected: [],
@@ -99,11 +99,9 @@ export default {
 	},
 	mounted: function () {
 		this.gameScale = (window.innerHeight/8.64)/100
-		this.isMobile = /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent)
-		this.isLandscape = window.screen.orientation.type=="landscape-primary"
-		if(this.isMobile === true && this.isLandscape)
+		
+		if(this.isMobile === true)
 			document.querySelector("#game").style.left = "-30%"
-		console.log(this.isLandscape)
 	}
 }
 </script>

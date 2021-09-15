@@ -4,7 +4,7 @@
 		<div v-if="!active_user">
 
 			<Login 
-				:users="users" 
+				:users="users"
 				@logged="logIn($event)"
 				/>
 

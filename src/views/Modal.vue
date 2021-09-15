@@ -6,12 +6,11 @@
 			<input class="user-head input-style"
 				data-key="name"
 				placeholder="Имя"
-				v-on:change="findChange"
 				v-model="user.name">
+
 			<input class="user-head input-style"
 				data-key="surname"
-				placeholder="Фамилия" 
-				v-on:change="findChange"
+				placeholder="Фамилия"
 				v-model="user.surname">
 
 			<div class="clear"></div>
@@ -23,7 +22,6 @@
 						class="input-style sub"
 						data-key="email"
 						placeholder="Почта"
-						v-on:change="findChange"
 						v-model="user.email">
 				</div>
 				<div class="right">
@@ -32,7 +30,7 @@
 						class="input-style sub"
 						data-key="phone"
 						placeholder="Телефон"
-						v-on:change="findChange"
+						v-mask="+'#-###-###-####'"
 						v-model="user.phone">
 				</div>
 			</div>
@@ -43,20 +41,20 @@
 				<div class="left">
 					<input
 						class="sub input-style date"
-						type="number"
+						type="text"
 						data-key="sub_start"
 						placeholder="dd/mm/yy"
-						v-on:keypress="valDate($event)"
-						v-model="user.subs_start">
+						v-mask="'##/##/####'"
+						v-model="user.subs_start" />
 				</div>
 				<div class="right">
 					<input
 						class="sub input-style date"
-						type="number"
+						type="text"
 						data-key="subs_end"
 						placeholder="dd/mm/yy"
-						v-on:keypress="valDate($event)"
-						v-model="user.subs_end">
+						v-mask="'##/##/####'"
+						v-model="user.subs_end" />
 				</div>
 			</div>
 
@@ -68,15 +66,14 @@
 						class="sub input-style"
 						data-key="role"
 						placeholder="Роль"
-						v-on:change="findChange"
 						v-model="user.role">
 				</div>
 				<div class="right">
 					<input
-						class="sub input-style" 
+						class="sub input-style"
+						type="password"
 						data-key="password"
 						placeholder="Пароль"
-						v-on:change="findChange"
 						v-model="user.password">
 				</div>
 			</div>
@@ -96,6 +93,10 @@
 </template>
 
 <script>
+import Vue from 'vue'
+
+import VueMask from 'v-mask'
+Vue.use(VueMask)
 
 export default {
 	name: 'Modal',
@@ -104,7 +105,7 @@ export default {
 		return {
 			isChanged: false,
 			isEdited: {},
-			isNew: false
+			isNew: false,
 		}
 	},
 	watch: { 
@@ -123,7 +124,7 @@ export default {
 		}
 	},*/
 	methods: {
-		findChange($event) {
+/*		findChange($event) {
 			let dump = {};
 			let target = $event.currentTarget
 			let ename = target.getAttribute('data-key');
@@ -145,7 +146,7 @@ export default {
 				if(charCode == 47) {
 					return false
 				}
-			}*/
+			}
 			if(len === 2) {
 				target.value += '/'
 				console.log('2')
@@ -155,9 +156,11 @@ export default {
 				console.log('5')
 			}
 			console.log(len)
-		},
+		},*/
 		saveUser() {
 			let self = this;
+			self.user.subs_start = self.model.timeAndDate_start
+			self.user.subs_end = self.model.timeAndDate_end
 			self.$emit('save', self.user)
 			console.log('save')
 		},
@@ -176,7 +179,7 @@ export default {
 		}
 	},
 created () {
-		this.user.id == undefined ? this.isNew = true : this.isNew = false
+		this.user.id === '' ? this.isNew = true : this.isNew = false
 		console.log(this.user.id)
 	}
 }
